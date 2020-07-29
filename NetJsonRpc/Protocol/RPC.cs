@@ -128,9 +128,16 @@ namespace NetJsonRpc.Protocol
 
                 Type typePar = parameterInfo.ParameterType;
 
+                if(value is JValue)
+                {
+                    value = ((JValue)value).Value;
+
+                    parameters[i] = value;
+                }
+
                 Type typeObj = value.GetType();
 
-                if (!typePar.Equals(typeObj))
+                if (!typePar.IsAssignableFrom(typeObj))
                 {
                     var typeParName = typePar.Namespace + "." + typePar.Name;
 
@@ -141,13 +148,11 @@ namespace NetJsonRpc.Protocol
                         if (value is IDictionary<string, object>)
                         {
                             parameters[i] = WUtil.CreateObject((IDictionary<string, object>)value, typePar);
-
                             continue;
                         }
                         else if(value is JObject)
                         {
                             parameters[i] = WUtil.CreateObject((JObject)value, typePar);
-
                             continue;
                         }
                     }
@@ -164,13 +169,11 @@ namespace NetJsonRpc.Protocol
                         else if (value is JObject)
                         {
                             parameters[i] = WUtil.ToDictionary(value);
-
                             continue;
                         }
                         else if (!typeObjName.StartsWith("System."))
                         {
                             parameters[i] = WUtil.ToDictionary(value);
-
                             continue;
                         }
                     }
@@ -179,7 +182,6 @@ namespace NetJsonRpc.Protocol
                         if (value is IEnumerable<object>)
                         {
                             parameters[i] = WUtil.ToArray(value);
-
                             continue;
                         }
                     }
@@ -188,7 +190,14 @@ namespace NetJsonRpc.Protocol
                         if (value is IEnumerable<object>)
                         {
                             parameters[i] = WUtil.ToList(value);
-
+                            continue;
+                        }
+                    }
+                    else if (value is Int64)
+                    {
+                        if (typePar.Equals(typeof(Int32)))
+                        {
+                            parameters[i] = Convert.ToInt32(value);
                             continue;
                         }
                     }

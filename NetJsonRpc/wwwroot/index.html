@@ -17,6 +17,7 @@
 
             // testFindCities();
 
+            // testInsertLang()
         }
 
         function testHello() {
@@ -43,9 +44,21 @@
         function testFindCities() {
             var filter = { "countryCode": "ITA" };
 
-            jrpc.execute('DBMS.findCities', [filter],
+            jrpc.execute('DBMS.FindCities', [filter],
                 function (result) {
                     document.getElementById("result").innerHTML = '<p>Result:<br> ' + arrayToHtml(result) + '</p>';
+                },
+                function (error) {
+                    document.getElementById("result").innerHTML = '<p>Error: <strong>' + error.message + '</strong></p>';
+                }
+            );
+        }
+
+        function testInsertLang() {
+
+            jrpc.execute('DBMS.insertLang', ["ITA", "Spanish", false, 1],
+                function (result) {
+                    document.getElementById("result").innerHTML = '<p>Result: <strong>' + result + '</strong></p>';
                 },
                 function (error) {
                     document.getElementById("result").innerHTML = '<p>Error: <strong>' + error.message + '</strong></p>';
