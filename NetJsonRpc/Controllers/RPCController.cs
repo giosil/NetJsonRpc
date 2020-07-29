@@ -16,6 +16,7 @@ namespace NetJsonRpc.Controllers
         {
             // Initialize RPC
             RPC.AddHanlder("TEST", new TestService());
+            RPC.AddHanlder("DBMS", new DBService());
         }
 
         // GET api/rpc

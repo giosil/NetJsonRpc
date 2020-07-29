@@ -13,6 +13,13 @@
     <script>
         window.onload = function () {
 
+            testHello();
+
+            // testFindCities();
+
+        }
+
+        function testHello() {
             var person = {
                 "firstname": "World",
                 "address": { "place": "Universe" },
@@ -31,6 +38,30 @@
                     document.getElementById("result").innerHTML = '<p>Error: <strong>' + error.message + '</strong></p>';
                 }
             );
+        }
+
+        function testFindCities() {
+            var filter = { "countryCode": "ITA" };
+
+            jrpc.execute('DBMS.findCities', [filter],
+                function (result) {
+                    document.getElementById("result").innerHTML = '<p>Result:<br> ' + arrayToHtml(result) + '</p>';
+                },
+                function (error) {
+                    document.getElementById("result").innerHTML = '<p>Error: <strong>' + error.message + '</strong></p>';
+                }
+            );
+        }
+
+        function arrayToHtml(array) {
+            if (!array) return "";
+
+            var result = "";
+            for (var i = 0; i < array.length; i++) {
+                result += "<strong>[" + array[i]["id"] + "] " + array[i]["name"] + "</strong><br>";
+            }
+
+            return result;
         }
     </script>
 </body>
