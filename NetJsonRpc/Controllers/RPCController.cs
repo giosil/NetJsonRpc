@@ -16,13 +16,13 @@ namespace NetJsonRpc.Controllers
     {
         private readonly ILogger<RpcController> _logger;
 
-        public RpcController(ILogger<RpcController> logger)
+        public RpcController(ILoggerFactory loggerFactory)
         {
             // Initialize logger
-            this._logger = logger;
+            this._logger = loggerFactory.CreateLogger<RpcController>();
 
             // Initialize RPC
-            RPC.AddHanlder("TEST", new TestService());
+            RPC.AddHanlder("TEST", new TestService(loggerFactory));
             RPC.AddHanlder("DBMS", new DBService());
         }
 
