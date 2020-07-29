@@ -48,7 +48,7 @@ namespace NetJsonRpc.Protocol
 
         public static long ToLong(object value)
         {
-            if (value == null) return 0l;
+            if (value == null) return 0L;
 
             if (value is Int64)
             {
@@ -290,47 +290,9 @@ namespace NetJsonRpc.Protocol
             if (dictionary == null) return null;
             if(type == null) return dictionary;
 
-            object result = Activator.CreateInstance(type);
-            foreach (KeyValuePair<string, object> keyValuePair in dictionary)
-            {
-                var key = keyValuePair.Key;
+            JObject jobject = JObject.FromObject(dictionary);
 
-                PropertyInfo propertyInfo = type.GetProperty(key);
-
-                if (propertyInfo == null)
-                {
-                    key = key.Substring(0, 1).ToUpper() + key.Substring(1);
-
-                    propertyInfo = type.GetProperty(key);
-                }
-
-                if (propertyInfo == null) continue;
-
-                Type propertyType = propertyInfo.PropertyType;
-
-                string propertyTypeName = propertyType.Namespace + "." + propertyType.Name;
-
-                if (propertyTypeName.EndsWith(']'))
-                {
-                    Type elementType = propertyType.GetElementType();
-
-                    object arrayOf = ToArrayOf(keyValuePair.Value, elementType);
-
-                    propertyInfo.SetValue(result, arrayOf);
-                }
-                else if (!propertyTypeName.StartsWith("System."))
-                {
-                    IDictionary<string, object> dicValue = ToDictionary(keyValuePair.Value);
-
-                    propertyInfo.SetValue(result, CreateObject(dicValue, propertyType));
-                }
-                else
-                {
-                    propertyInfo.SetValue(result, keyValuePair.Value);
-                }
-            }
-
-            return result;
+            return CreateObject(jobject, type);
         }
 
         public static object CreateObject(JObject jobject, Type type)

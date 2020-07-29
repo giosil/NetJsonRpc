@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace NetJsonRpc.Services
 {
@@ -23,9 +24,9 @@ namespace NetJsonRpc.Services
         {
             if (person == null) return "";
 
-            Phone[] phones = person.Phones;
+            IList<Phone> phones = person.Phones;
 
-            if (phones == null || phones.Length == 0) return "";
+            if (phones == null || phones.Count == 0) return "";
 
             string result = "";
 
@@ -43,9 +44,9 @@ namespace NetJsonRpc.Services
         {
             if (person == null) return "";
 
-            string[] emails = person.Emails;
+            IList<string> emails = person.Emails;
 
-            if (emails == null || emails.Length == 0) return "";
+            if (emails == null || emails.Count == 0) return "";
 
             string result = "";
 

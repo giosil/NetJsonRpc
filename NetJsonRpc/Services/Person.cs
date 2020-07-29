@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace NetJsonRpc.Services
 {
@@ -10,8 +11,8 @@ namespace NetJsonRpc.Services
         private string sex;
         private bool registered;
         private Address address;
-        private Phone[] phones;
-        private string[] emails;
+        private IList<Phone> phones;
+        private IList<string> emails;
 
         public Person()
         {
@@ -32,8 +33,8 @@ namespace NetJsonRpc.Services
         public string Sex { get => sex; set => sex = value; }
         public bool Registered { get => registered; set => registered = value; }
         public Address Address { get => address; set => address = value; }
-        public Phone[] Phones { get => phones; set => phones = value; }
-        public string[] Emails { get => emails; set => emails = value; }
+        public IList<Phone> Phones { get => phones; set => phones = value; }
+        public IList<string> Emails { get => emails; set => emails = value; }
 
         public override string ToString()
         {

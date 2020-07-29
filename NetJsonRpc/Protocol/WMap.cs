@@ -76,7 +76,7 @@ namespace NetJsonRpc.Protocol
                 return WUtil.ToLong(map[key]);
             }
 
-            return 0l;
+            return 0L;
         }
 
         public long GetLong(string key, long defValue)
