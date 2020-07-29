@@ -7,7 +7,7 @@ using NetJsonRpc.Services;
 
 namespace Tests
 {
-    public class Tests
+    public class UnitTest
     {
         [SetUp]
         public void Setup()
