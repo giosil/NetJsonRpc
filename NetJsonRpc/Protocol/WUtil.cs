@@ -98,6 +98,11 @@ namespace NetJsonRpc.Protocol
         {
             if (value == null) return false;
 
+            if(value is Boolean)
+            {
+                return (Boolean)value;
+            }
+
             return Convert.ToBoolean(value);
         }
 
@@ -105,11 +110,21 @@ namespace NetJsonRpc.Protocol
         {
             if (value == null) return defValue;
 
+            if (value is Boolean)
+            {
+                return (Boolean)value;
+            }
+
             return Convert.ToBoolean(value);
         }
 
         public static DateTime ToDateTime(object value)
         {
+            if(value is DateTime)
+            {
+                return (DateTime)value;
+            }
+
             return Convert.ToDateTime(value);
         }
 
@@ -117,10 +132,15 @@ namespace NetJsonRpc.Protocol
         {
             if (value == null) return defValue;
 
+            if (value is DateTime)
+            {
+                return (DateTime)value;
+            }
+
             return Convert.ToDateTime(value);
         }
 
-        public static IDictionary<string, object> ToDictionary(object source, BindingFlags bindingAttr = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
+        public static IDictionary<string, object> ToDictionary(object source)
         {
             if (source == null) return null;
 
@@ -146,7 +166,7 @@ namespace NetJsonRpc.Protocol
                 return result;
             }
 
-            PropertyInfo[] arrayOfPropertyInfo = source.GetType().GetProperties(bindingAttr);
+            PropertyInfo[] arrayOfPropertyInfo = source.GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
 
             foreach (PropertyInfo propertyInfo in arrayOfPropertyInfo)
             {

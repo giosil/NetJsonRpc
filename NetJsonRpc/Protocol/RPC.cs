@@ -74,7 +74,9 @@ namespace NetJsonRpc.Protocol
 
             Type type = target.GetType();
 
-            MethodInfo[] arrayOfMethodInfo = type.GetMethods(BindingFlags.Public | BindingFlags.Instance);
+            MethodInfo[] arrayOfMethodInfo = type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
+
+            MethodInfo firstMethodInfo = null;
 
             foreach (MethodInfo methodInfo in arrayOfMethodInfo)
             {
@@ -95,7 +97,12 @@ namespace NetJsonRpc.Protocol
                             return new RPCResponse(id, -32600, ex.ToString());
                         }
 
-                        if (invokeParameters == null) continue;
+                        if (invokeParameters == null)
+                        {
+                            firstMethodInfo = methodInfo;
+
+                            continue;
+                        }
 
                         try
                         {
@@ -108,6 +115,25 @@ namespace NetJsonRpc.Protocol
 
                         return new RPCResponse(id, result);
                     }
+                }
+            }
+
+            if(firstMethodInfo != null)
+            {
+                object[] invokeParameters = ConvertParameters(firstMethodInfo.GetParameters(), parameters);
+
+                if(invokeParameters != null)
+                {
+                    try
+                    {
+                        result = firstMethodInfo.Invoke(target, invokeParameters);
+                    }
+                    catch (Exception ex)
+                    {
+                        return new RPCResponse(id, -32000, ex.ToString());
+                    }
+
+                    return new RPCResponse(id, result);
                 }
             }
 
@@ -202,6 +228,38 @@ namespace NetJsonRpc.Protocol
                         }
                     }
                     return null;
+                }
+            }
+
+            return parameters;
+        }
+
+        public static object[] ConvertParameters(ParameterInfo[] arrayOfParameterInfo, object[] parameters)
+        {
+            if (arrayOfParameterInfo.Length != parameters.Length) return null;
+
+            for (int i = 0; i < arrayOfParameterInfo.Length; i++)
+            {
+                object value = parameters[i];
+
+                if (value == null) continue;
+
+                ParameterInfo parameterInfo = arrayOfParameterInfo[i];
+
+                Type typePar = parameterInfo.ParameterType;
+
+                if (value is JValue)
+                {
+                    value = ((JValue)value).Value;
+
+                    parameters[i] = value;
+                }
+
+                Type typeObj = value.GetType();
+
+                if (!typePar.IsAssignableFrom(typeObj))
+                {
+                    parameters[i] = WUtil.ToObjectOf(value, typePar);
                 }
             }
 
