@@ -305,6 +305,39 @@ namespace NetJsonRpc.Protocol
             return result;
         }
 
+        public static object ToListOf(object value, Type typeElement)
+        {
+            if (value == null) return null;
+
+            if (value is WList) value = ((WList)value).GetList();
+
+            if (typeElement == null) typeElement = typeof(object);
+
+            var typeGen = typeof(List<>).MakeGenericType(typeElement);
+
+            var result = Activator.CreateInstance(typeGen);
+
+            MethodInfo addMethod = result.GetType().GetMethod("Add");
+
+            if (addMethod == null) return null;
+
+            object[] addParams = new object[1];
+
+            if (typeof(IEnumerable<object>).IsAssignableFrom(value.GetType()))
+            {
+                IEnumerator<object> enumerator = ((IEnumerable<object>)value).GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    addParams[0] = ToObjectOf(enumerator.Current, typeElement);
+                    addMethod.Invoke(result, addParams);
+                }
+                return result;
+            }
+            addParams[0] = ToObjectOf(value, typeElement);
+            addMethod.Invoke(result, addParams);
+            return result;
+        }
+
         public static object CreateObject(IDictionary<string, object> dictionary, Type type)
         {
             if (dictionary == null) return null;

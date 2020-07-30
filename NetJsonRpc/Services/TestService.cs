@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 
 namespace NetJsonRpc.Services
@@ -42,6 +42,20 @@ namespace NetJsonRpc.Services
             }
 
             return "Hello " + person + ".";
+        }
+
+        public string Concat(IList<string> values)
+        {
+            if (values == null || values.Count == 0)
+            {
+                return "";
+            }
+            string result = "";
+            foreach (string item in values)
+            {
+                result += "," + item;
+            }
+            return result.Substring(1);
         }
     }
 }

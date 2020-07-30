@@ -6,6 +6,9 @@ using Newtonsoft.Json.Linq;
 
 namespace NetJsonRpc.Protocol
 {
+    /// <summary>
+    /// RPC implementation.
+    /// </summary>
     public static class RPC
     {
         private static IDictionary<string, object> handlers = new Dictionary<string, object>();
@@ -15,6 +18,9 @@ namespace NetJsonRpc.Protocol
             handlers[handlerId] = hanlder;
         }
 
+        /// <summary>
+        /// Invoke execute a request.
+        /// </summary>
         public static RPCResponse Invoke(IDictionary<string, object> request)
         {
             WMap wmap = new WMap(request);
@@ -51,6 +57,9 @@ namespace NetJsonRpc.Protocol
             return Invoke(id, target, methodName, parameters);
         }
 
+        /// <summary>
+        /// Invoke execute methodName on target with parameters.
+        /// </summary>
         public static RPCResponse Invoke(int id, object target, string methodName, object[] parameters)
         {
             if (target == null)
@@ -76,7 +85,7 @@ namespace NetJsonRpc.Protocol
 
             MethodInfo[] arrayOfMethodInfo = type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
 
-            MethodInfo firstMethodInfo = null;
+            MethodInfo lastMethodInfo = null;
 
             foreach (MethodInfo methodInfo in arrayOfMethodInfo)
             {
@@ -99,7 +108,7 @@ namespace NetJsonRpc.Protocol
 
                         if (invokeParameters == null)
                         {
-                            firstMethodInfo = methodInfo;
+                            lastMethodInfo = methodInfo;
 
                             continue;
                         }
@@ -118,15 +127,15 @@ namespace NetJsonRpc.Protocol
                 }
             }
 
-            if(firstMethodInfo != null)
+            if(lastMethodInfo != null)
             {
-                object[] invokeParameters = ConvertParameters(firstMethodInfo.GetParameters(), parameters);
+                object[] invokeParameters = ConvertParameters(lastMethodInfo.GetParameters(), parameters);
 
                 if(invokeParameters != null)
                 {
                     try
                     {
-                        result = firstMethodInfo.Invoke(target, invokeParameters);
+                        result = lastMethodInfo.Invoke(target, invokeParameters);
                     }
                     catch (Exception ex)
                     {
@@ -205,25 +214,56 @@ namespace NetJsonRpc.Protocol
                     }
                     else if (typeof(Array).IsAssignableFrom(typePar))
                     {
-                        if (value is IEnumerable<object>)
-                        {
-                            parameters[i] = WUtil.ToArray(value);
-                            continue;
-                        }
+                        parameters[i] = WUtil.ToArrayOf(value, typePar.GetElementType());
+                        continue;
                     }
-                    else if (typeof(IList<object>).IsAssignableFrom(typePar))
+                    else if (typeof(IEnumerable<object>).IsAssignableFrom(typePar))
                     {
-                        if (value is IEnumerable<object>)
+                        Type elementType = typePar.GetElementType();
+                        if(elementType == null)
                         {
-                            parameters[i] = WUtil.ToList(value);
-                            continue;
+                            Type[] generciArguments = typePar.GetGenericArguments();
+                            elementType = generciArguments != null && generciArguments.Length > 0 ? generciArguments[0] : null;
                         }
+                        parameters[i] = WUtil.ToListOf(value, elementType);
+                        continue;
                     }
                     else if (value is Int64)
                     {
                         if (typePar.Equals(typeof(Int32)))
                         {
                             parameters[i] = Convert.ToInt32(value);
+                            continue;
+                        }
+                        else if (typePar.Equals(typeof(Double)))
+                        {
+                            parameters[i] = Convert.ToDouble(value);
+                            continue;
+                        }
+                    }
+                    else if (value is Int32)
+                    {
+                        if (typePar.Equals(typeof(Int64)))
+                        {
+                            parameters[i] = Convert.ToInt64(value);
+                            continue;
+                        }
+                        else if (typePar.Equals(typeof(Double)))
+                        {
+                            parameters[i] = Convert.ToDouble(value);
+                            continue;
+                        }
+                    }
+                    else if (value is Double)
+                    {
+                        if (typePar.Equals(typeof(Int32)))
+                        {
+                            parameters[i] = Convert.ToInt32(value);
+                            continue;
+                        }
+                        else if (typePar.Equals(typeof(Int64)))
+                        {
+                            parameters[i] = Convert.ToInt64(value);
                             continue;
                         }
                     }

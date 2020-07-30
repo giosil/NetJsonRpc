@@ -2,6 +2,9 @@
 
 namespace NetJsonRpc.Protocol
 {
+    /// <summary>
+    /// JSON-RPC Response.
+    /// </summary>
     public class RPCResponse
     {
         private int id;

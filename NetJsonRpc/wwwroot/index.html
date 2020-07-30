@@ -15,6 +15,8 @@
 
             testHello();
 
+            // testConcat();
+
             // testFindCities();
 
             // testInsertLang()
@@ -34,6 +36,19 @@
             jrpc.execute('TEST.hello', [person],
                 function (result) {
                     document.getElementById("result").innerHTML = '<p>Result: <strong>' + result + '</strong></p>';
+                },
+                function (error) {
+                    document.getElementById("result").innerHTML = '<p>Error: <strong>' + error.message + '</strong></p>';
+                }
+            );
+        }
+
+        function testConcat() {
+            var values = ["A", "B", "C"];
+
+            jrpc.execute('TEST.Concat', [values],
+                function (result) {
+                    document.getElementById("result").innerHTML = '<p>Result:<br> ' + result + '</p>';
                 },
                 function (error) {
                     document.getElementById("result").innerHTML = '<p>Error: <strong>' + error.message + '</strong></p>';
