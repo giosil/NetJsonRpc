@@ -21,38 +21,39 @@ namespace NetJsonRpc.Protocol
         /// <summary>
         /// Invoke execute a request.
         /// </summary>
-        public static RPCResponse Invoke(IDictionary<string, object> request)
+        public static RPCResponse Invoke(RPCRequest request)
         {
-            WMap wmap = new WMap(request);
+            int id = request.Id;
 
-            int id = wmap.GetInt("id");
+            string method = request.Method;
 
-            string method = wmap.GetString("method");
-
-            object[] parameters = wmap.GetArray("params", true);
+            object[] parameters = request.Parameters;
 
             if (method == null || method.Length == 0)
             {
                 return new RPCResponse(id, -32600, "Invalid Request");
             }
 
-            int sep = method.IndexOf('.');
+            string handlerName = request.GetHandlerName();
 
-            if(sep <= 0)
+            if (handlerName == null || handlerName.Length == 0)
             {
                 return new RPCResponse(id, -32600, "Invalid Request");
             }
 
-            string handlerId = method.Substring(0, sep);
-
-            if(!handlers.ContainsKey(handlerId))
+            if (!handlers.ContainsKey(handlerName))
             {
                 return new RPCResponse(id, -32600, "Handler not available");
             }
 
-            object target = handlers[handlerId];
+            object target = handlers[handlerName];
 
-            string methodName = method.Substring(sep + 1);
+            string methodName = request.GetMethodName();
+
+            if (methodName == null || methodName.Length == 0)
+            {
+                return new RPCResponse(id, -32600, "Invalid Request");
+            }
 
             return Invoke(id, target, methodName, parameters);
         }

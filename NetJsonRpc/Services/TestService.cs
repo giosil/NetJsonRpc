@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+
 using Microsoft.Extensions.Logging;
+
+using NetJsonRpc.Auth;
 
 namespace NetJsonRpc.Services
 {
@@ -44,18 +48,16 @@ namespace NetJsonRpc.Services
             return "Hello " + person + ".";
         }
 
-        public string Concat(IList<string> values)
+        public string GetCurrentUser()
         {
-            if (values == null || values.Count == 0)
+            object user = Thread.GetData(Thread.GetNamedDataSlot("user"));
+
+            if(user is User)
             {
-                return "";
+                return ((User)user).Username;
             }
-            string result = "";
-            foreach (string item in values)
-            {
-                result += "," + item;
-            }
-            return result.Substring(1);
+
+            return "";
         }
     }
 }

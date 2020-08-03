@@ -11,11 +11,11 @@
 
     <script type="text/javascript" src="jrpc.js"></script>
     <script>
-        window.onload = function () {
+        window.onload = function() {
 
             testHello();
 
-            // testConcat();
+            // testGetCurrentUser();
 
             // testFindCities();
 
@@ -43,12 +43,10 @@
             );
         }
 
-        function testConcat() {
-            var values = ["A", "B", "C"];
-
-            jrpc.execute('TEST.Concat', [values],
+        function testGetCurrentUser() {
+            jrpc.execute('TEST.GetCurrentUser', [],
                 function (result) {
-                    document.getElementById("result").innerHTML = '<p>Result:<br> ' + result + '</p>';
+                    document.getElementById("result").innerHTML = '<p>Result: ' + result + '</p>';
                 },
                 function (error) {
                     document.getElementById("result").innerHTML = '<p>Error: <strong>' + error.message + '</strong></p>';

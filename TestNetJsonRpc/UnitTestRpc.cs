@@ -21,12 +21,9 @@ namespace Tests
             object[] parameters = new object[1];
             parameters[0] = BuildPerson();
 
-            IDictionary<string, object> request = new Dictionary<string, object>();
-            request["id"] = 1;
-            request["method"] = "TEST.hello";
-            request["params"] = parameters;
-
-            RPCResponse response = RPC.Invoke(request);
+            RPCRequest rpcRequest = new RPCRequest(1, "TEST.hello", parameters);
+            
+            RPCResponse response = RPC.Invoke(rpcRequest);
 
             Log("response.Success     : " + response.Success);
             Log("response.Result      : " + response.Result);
