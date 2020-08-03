@@ -7,8 +7,6 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<hr>
-
 @if (Model.IsUserLogged)
 {
     <p>@Model.Message</p>
@@ -21,4 +19,10 @@ else
         <br />
         <button type="submit">Login</button>
     </form>
+}
+
+@section Scripts {
+    <script>
+        console.log("Welcome");
+    </script>
 }

@@ -126,7 +126,7 @@ namespace NetJsonRpc.Protocol
         {
             if (map.ContainsKey(key))
             {
-                return WUtil.ToDateTime(map[key]);
+                return WUtil.ToDateTime(map[key], defValue);
             }
 
             return defValue;

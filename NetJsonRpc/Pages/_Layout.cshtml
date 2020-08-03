@@ -1,12 +1,17 @@
-﻿<!DOCTYPE html>
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewData["Title"]</title>
+
+    <partial name="_PageHeadPartial" />
 </head>
 <body>
     <div id="content">
         @RenderBody()
     </div>
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

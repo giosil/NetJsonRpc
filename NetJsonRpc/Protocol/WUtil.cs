@@ -127,6 +127,14 @@ namespace NetJsonRpc.Protocol
             {
                 return (DateTime)value;
             }
+            else if(value is string)
+            {
+                return ParseDateTime((string)value, DateTime.MinValue);
+            }
+            else if (value is Int32)
+            {
+                return ParseDateTime((Int32)value, DateTime.MinValue);
+            }
 
             return Convert.ToDateTime(value);
         }
@@ -138,6 +146,14 @@ namespace NetJsonRpc.Protocol
             if (value is DateTime)
             {
                 return (DateTime)value;
+            }
+            else if (value is string)
+            {
+                return ParseDateTime((string)value, defValue);
+            }
+            else if (value is Int32)
+            {
+                return ParseDateTime((Int32)value, defValue);
             }
 
             return Convert.ToDateTime(value);
@@ -392,6 +408,12 @@ namespace NetJsonRpc.Protocol
 
                     propertyInfo.SetValue(result, CreateObject(dicValue, propertyType));
                 }
+                else if(propertyTypeName.Equals("System.DateTime"))
+                {
+                    object value = ToObject(keyValuePair.Value);
+
+                    propertyInfo.SetValue(result, ToDateTime(value));
+                }
                 else
                 {
                     propertyInfo.SetValue(result, keyValuePair.Value.ToObject(propertyType));
@@ -399,6 +421,64 @@ namespace NetJsonRpc.Protocol
             }
 
             return result;
+        }
+
+        public static DateTime ParseDateTime(int value, DateTime defValue)
+        {
+            if (value < 10000) return defValue;
+
+            int year = value / 10000;
+            int month = (value % 10000) / 100;
+            int day = (value % 10000) % 100;
+
+            return new DateTime(year, month, day);
+        }
+
+        public static DateTime ParseDateTime(string text, DateTime defValue)
+        {
+            if(text == null || text.Length == 0)
+            {
+                return defValue;
+            }
+            if(text.Length > 9 && text[4] == '-' && text[7] == '-')
+            {
+                // ISO 8601
+                return DateTime.Parse(text);
+            }
+
+            List<int> tokens = new List<int>();
+
+            string number = "";
+            foreach(char c in text)
+            {
+                if(Char.IsDigit(c))
+                {
+                    number += c;
+                }
+                else if(number.Length > 0)
+                {
+                    tokens.Add(Convert.ToInt32(number));
+
+                    number = "";
+                }
+            }
+            if (number.Length > 0)
+            {
+                tokens.Add(Convert.ToInt32(number));
+            }
+            if (tokens.Count < 3)
+            {
+                return defValue;
+            }
+
+            int day = tokens[0] < 32 ? tokens[0] : tokens[2];
+            int month = tokens[1];
+            int year = tokens[0] < 32 ? tokens[2] : tokens[0];
+            int hour = tokens.Count > 3 ? tokens[3] : 0;
+            int minute = tokens.Count > 4 ? tokens[4] : 0;
+            int second = tokens.Count > 5 ? tokens[5] : 0;
+
+            return new DateTime(year, month, day, hour, minute, second);
         }
 
         public static object ToObject(JToken jtoken)
