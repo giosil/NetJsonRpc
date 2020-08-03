@@ -3,14 +3,13 @@ using System.Threading;
 using System.Collections.Generic;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 using Microsoft.Extensions.Logging;
 
+using NetJsonRpc.Auth;
 using NetJsonRpc.Protocol;
 using NetJsonRpc.Services;
-
-using NetJsonRpc.Auth;
-using Microsoft.AspNetCore.Http;
 
 namespace NetJsonRpc.Controllers
 {
@@ -34,7 +33,7 @@ namespace NetJsonRpc.Controllers
         [HttpGet]
         public ActionResult<string> Get()
         {
-            _logger.LogInformation("RpcController.Get...");
+            _logger.LogInformation("### RpcController.Get...");
 
             User user = HttpContext.Session.GetUser();
 
@@ -49,7 +48,7 @@ namespace NetJsonRpc.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult<IDictionary<string, object>> Post([FromBody] IDictionary<string, object> request)
         {
-            _logger.LogInformation("RpcController.Post...");
+            _logger.LogInformation("### RpcController.Post...");
 
             RPCRequest rpcRequest = new RPCRequest(request);
 

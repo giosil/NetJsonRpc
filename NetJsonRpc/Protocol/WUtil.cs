@@ -6,6 +6,9 @@ using Newtonsoft.Json.Linq;
 
 namespace NetJsonRpc.Protocol
 {
+    /// <summary>
+    /// Utilities.
+    /// </summary>
     public static class WUtil
     {
         public static string ToString(object value)

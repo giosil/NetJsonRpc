@@ -1,0 +1,24 @@
+﻿@page
+@model NetJsonRpc.Pages.WelcomeModel
+@{
+    ViewData["Title"] = "Welcome";
+    Layout = "~/Pages/_Layout.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<hr>
+
+@if (Model.IsUserLogged)
+{
+    <p>@Model.Message</p>
+}
+else
+{
+    <form method="post">
+        Username: <input type="text" name="username" /> Password: <input type="password" name="password" />
+        <br />
+        <br />
+        <button type="submit">Login</button>
+    </form>
+}

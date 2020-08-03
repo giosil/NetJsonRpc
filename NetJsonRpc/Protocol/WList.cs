@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace NetJsonRpc.Protocol
 {
+    /// <summary>
+    /// Wrapped list.
+    /// </summary>
     public class WList
     {
         private IList<object> list;

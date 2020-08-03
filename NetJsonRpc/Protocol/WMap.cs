@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace NetJsonRpc.Protocol
 {
+    /// <summary>
+    /// Wrapped Map.
+    /// </summary>
     public class WMap
     {
         private IDictionary<string, object> map;

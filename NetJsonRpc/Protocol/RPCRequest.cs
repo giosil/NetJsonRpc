@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace NetJsonRpc.Protocol
 {
+    /// <summary>
+    /// JSON-RPC Request.
+    /// </summary>
     public class RPCRequest
     {
         private int id;

@@ -26,7 +26,7 @@ namespace NetJsonRpc.Services
 
         public string Hello(Person person)
         {
-            _logger.LogInformation("TestService.Hello(" + person + ")...");
+            _logger.LogInformation("### TestService.Hello(" + person + ")...");
 
             if (person.Firstname != null && person.Firstname.Equals("error"))
             {
@@ -38,7 +38,7 @@ namespace NetJsonRpc.Services
 
         public string Hello(Person person, string locale)
         {
-            _logger.LogInformation("TestService.Hello(" + person + "," + locale + ")...");
+            _logger.LogInformation("### TestService.Hello(" + person + "," + locale + ")...");
 
             if (locale != null && locale.ToLower().Equals("it"))
             {
