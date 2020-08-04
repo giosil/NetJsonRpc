@@ -49,11 +49,7 @@ namespace NetJsonRpc.Controllers
     
     // POST api/rpc
     [HttpPost]
-    public 
-    ActionResult<IDictionary<string, object>> 
-    Post(
-      [FromBody] IDictionary<string, object> request
-    )
+    public ActionResult<IDictionary<string, object>> Post([FromBody] IDictionary<string, object> request)
     {
       RPCRequest req = new RPCRequest(request);
       
