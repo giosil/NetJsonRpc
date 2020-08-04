@@ -9,7 +9,8 @@ Simple JSON-RPC protocol implementation based on ASP.NET Core project.
 
 ## Run
 
-- `dotnet NetJsonRpc/published/NetJsonRpc.dll`
+- `cd NetJsonRpc` - Launching dotnet in the root folder has encountered a problem: http 404 calling index.html
+- `dotnet published/NetJsonRpc.dll`
 
 ## Run locally on Docker
 
