@@ -2,27 +2,61 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>JSON-RPC 2.0</title>
+    <title>NetJsonRpc</title>
 </head>
 <body>
-    <h1>JSON-RPC 2.0</h1>
-
-    <div id="result"></div>
+    <h1 style="text-align: center">NetJsonRpc</h1>
+    <br />
+    <hr />
+    <br />
+    <table border="1" style="border:1px solid #888888;border-collapse:collapse;" align="center">
+        <thead>
+            <tr style="background-color: #eeeeee">
+                <th>Test case</th>
+                <th>Launch</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>TEST.hello</td>
+                <td style="text-align:center"><button onclick="testHello()">Run</button></td>
+                <td><div id="r0"></div></td>
+            </tr>
+            <tr>
+                <td>TEST.GetCurrentUser</td>
+                <td style="text-align:center"><button onclick="testGetCurrentUser()">Run</button></td>
+                <td><div id="r1"></div></td>
+            </tr>
+            <tr>
+                <td>DBMS.FindCities</td>
+                <td style="text-align:center"><button onclick="testFindCities()">Run</button></td>
+                <td><div id="r2"></div></td>
+            </tr>
+            <tr>
+                <td>Generation PDF Report</td>
+                <td style="text-align:center"><a href="/report" target="_blank">View</a></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>ASP.NET Core Login Page</td>
+                <td style="text-align:center"><a href="/Login" target="_blank">View</a></td>
+                <td>&nbsp;</td>
+            </tr>
+        </tbody>
+    </table>
 
     <script type="text/javascript" src="jrpc.js"></script>
     <script>
-        window.onload = function() {
-
-            testHello();
-
-            // testGetCurrentUser();
-
-            // testFindCities();
-
-            // testInsertLang()
+        function cleanAll() {
+            document.getElementById("r0").innerHTML = "";
+            document.getElementById("r1").innerHTML = "";
+            document.getElementById("r2").innerHTML = "";
         }
 
         function testHello() {
+            cleanAll();
+
             var person = {
                 "firstname": "World",
                 "address": { "place": "Universe" },
@@ -36,58 +70,48 @@
 
             jrpc.execute('TEST.hello', [person],
                 function (result) {
-                    document.getElementById("result").innerHTML = '<p>Result: <strong>' + result + '</strong></p>';
+                    document.getElementById("r0").innerHTML = '<p>' + result + '</p>';
                 },
                 function (error) {
-                    document.getElementById("result").innerHTML = '<p>Error: <strong>' + error.message + '</strong></p>';
+                    document.getElementById("r0").innerHTML = '<p>Error: <strong>' + error.message + '</strong></p>';
                 }
             );
         }
 
         function testGetCurrentUser() {
+            cleanAll();
+
             jrpc.execute('TEST.GetCurrentUser', [],
                 function (result) {
-                    document.getElementById("result").innerHTML = '<p>Result: ' + result + '</p>';
+                    document.getElementById("r1").innerHTML = '<p>\"' + result + '\"</p>';
                 },
                 function (error) {
-                    document.getElementById("result").innerHTML = '<p>Error: <strong>' + error.message + '</strong></p>';
+                    document.getElementById("r1").innerHTML = '<p>Error: <strong>' + error.message + '</strong></p>';
                 }
             );
         }
 
         function testFindCities() {
+            cleanAll();
+
             var filter = { "countryCode": "ITA" };
 
             jrpc.execute('DBMS.FindCities', [filter],
                 function (result) {
-                    document.getElementById("result").innerHTML = '<p>Result:<br> ' + arrayToHtml(result) + '</p>';
+                    document.getElementById("r2").innerHTML = '<p>' + arrayToHtml(result) + '</p>';
                 },
                 function (error) {
-                    document.getElementById("result").innerHTML = '<p>Error: <strong>' + error.message + '</strong></p>';
-                }
-            );
-        }
-
-        function testInsertLang() {
-
-            jrpc.execute('DBMS.insertLang', ["ITA", "Spanish", false, 1],
-                function (result) {
-                    document.getElementById("result").innerHTML = '<p>Result: <strong>' + result + '</strong></p>';
-                },
-                function (error) {
-                    document.getElementById("result").innerHTML = '<p>Error: <strong>' + error.message + '</strong></p>';
+                    document.getElementById("r2").innerHTML = '<p>Error: <strong>' + error.message + '</strong></p>';
                 }
             );
         }
 
         function arrayToHtml(array) {
             if (!array) return "";
-
             var result = "";
             for (var i = 0; i < array.length; i++) {
-                result += "<strong>[" + array[i]["id"] + "] " + array[i]["name"] + "</strong><br>";
+                result += "[" + array[i]["id"] + "] " + array[i]["name"] + "<br>";
             }
-
             return result;
         }
     </script>

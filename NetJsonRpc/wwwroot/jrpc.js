@@ -89,11 +89,14 @@ JRPC.prototype.execute = function (methodName, params, successHandler, exception
                             successHandler(result);
                         }
                     break;
-                case 403:
-                    location.reload(true);
-                    break;
                 default:
                     console.log('JRPC.execute("' + methodName + '") -> HTTP ' + xhr.status);
+                    if (typeof exceptionHandler == 'function') {
+                        exceptionHandler({ "code": xhr.status, "message": "HTTP " + xhr.status});
+                    }
+                    else {
+                        _onRpcError({ "code": xhr.status, "message": "HTTP " + xhr.status });
+                    }
                     break;
             }
         }

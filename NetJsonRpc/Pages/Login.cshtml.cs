@@ -9,7 +9,7 @@ using NetJsonRpc.Auth;
 
 namespace NetJsonRpc.Pages
 {
-    public class WelcomeModel : PageModel
+    public class LoginModel : PageModel
     {
         public string Message { get; set; }
         public bool IsUserLogged { get; set; }
