@@ -1,5 +1,7 @@
 /.vs/
 /NetJsonRpc/bin/
 /NetJsonRpc/obj/Debug
+/NetJsonRpc/obj/Release
 /TestNetJsonRpc/bin/
 /TestNetJsonRpc/obj/Debug
+/TestNetJsonRpc/obj/Release
