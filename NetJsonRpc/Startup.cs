@@ -73,6 +73,7 @@ namespace NetJsonRpc
 
         private void HandleLogin(IApplicationBuilder app)
         {
+            // Intermediate processing example...
             app.Use(async (context, next) =>
             {
                 var username = context.Request.Query["username"];
