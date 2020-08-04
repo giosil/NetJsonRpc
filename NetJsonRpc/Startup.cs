@@ -59,11 +59,7 @@ namespace NetJsonRpc
 
             app.UseSession();
 
-            var defaultFilesOptions = new DefaultFilesOptions();
-            defaultFilesOptions.DefaultFileNames.Clear();
-            defaultFilesOptions.DefaultFileNames.Add("index.html");
-
-            app.UseDefaultFiles(defaultFilesOptions);
+            app.UseDefaultFiles();
 
             app.UseStaticFiles();
 

@@ -17,6 +17,11 @@ Simple JSON-RPC protocol implementation based on ASP.NET Core project.
 - `docker build -t netjsonrpc .`
 - `docker run --rm -it -p 5000:80 --name=netjsonrpc_test netjsonrpc`
 
+## Test
+
+- `dotnet build` 
+- `dotnet test` 
+
 ## Example
 
 ```csharp
