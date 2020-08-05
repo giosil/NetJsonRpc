@@ -13,12 +13,7 @@
 }
 else
 {
-    <form method="post">
-        Username: <input type="text" name="username" /> Password: <input type="password" name="password" />
-        <br />
-        <br />
-        <button type="submit">Login</button>
-    </form>
+    await Html.RenderPartialAsync("_FormLoginPartial.cshtml");
 }
 
 @section Scripts {
