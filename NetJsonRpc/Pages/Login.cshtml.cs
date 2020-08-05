@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -14,6 +11,9 @@ namespace NetJsonRpc.Pages
         public string Message { get; set; }
         public bool IsUserLogged { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string Type { get; set; }
+
         public void OnGet()
         {
             User user = HttpContext.Session.GetUser();
@@ -23,19 +23,33 @@ namespace NetJsonRpc.Pages
             IsUserLogged = user != null;
         }
 
-        public void OnPost()
+        public IActionResult OnPost()
         {
             var username = HttpContext.Request.Form["username"];
             var password = HttpContext.Request.Form["password"];
 
             User user = LoginModule.Login(username, password);
 
+            if(user == null)
+            {
+                // HTTP 302
+                // Location /Message?MessageCode=1
+                return RedirectToPage("/Message", new { MessageCode = "1" });
+            }
+
             // See Auth.SessionExtensions
             HttpContext.Session.SetUser(user);
 
-            Message = user != null ? user.Username + " logged" : "No logged user";
+            Message = user.Username + " logged";
 
-            IsUserLogged = user != null;
+            IsUserLogged = true;
+
+            if(Type != null && Type.Equals("json"))
+            {
+                return Content("{username=\"" + user.Username + "\"}", "application/json", System.Text.Encoding.UTF8);
+            }
+
+            return Page();
         }
     }
  }
