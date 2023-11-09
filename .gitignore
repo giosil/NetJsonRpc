@@ -1,4 +1,5 @@
 /.vs/
+/published
 /NetJsonRpc/bin/
 /NetJsonRpc/obj/Debug
 /NetJsonRpc/obj/Release
